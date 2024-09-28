@@ -11,3 +11,12 @@ body {
     display: flex;
     flex-direction: column;
 }
+
+.listing_container {
+    display: flex;
+}
+
+.listing_info_container {
+    display: flex;
+    flex-direction: column;
+}
