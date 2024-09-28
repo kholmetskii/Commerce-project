@@ -1,8 +1,9 @@
 from django.contrib.auth import authenticate, login, logout
 from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.urls import reverse
+from .models import Category, Listing
 
 from .models import User
 
@@ -61,3 +62,25 @@ def register(request):
         return HttpResponseRedirect(reverse("index"))
     else:
         return render(request, "auctions/register.html")
+
+
+def create_listing(request):
+    if request.user.is_authenticated:
+        categories = Category.objects.all()
+        if request.method == "GET":
+            return render(request, "auctions/create_listing.html", {
+                "categories": categories
+            })
+        else:
+            new_listing = Listing(
+                title=request.POST['title'],
+                description=request.POST['description'],
+                imageUrl=request.POST['imageURL'],
+                price=float(request.POST['price']),
+                category=Category.objects.get(name=request.POST['category']),
+                owner=request.user
+            )
+            new_listing.save()
+            return redirect('index')
+    else:
+        return render(request, "auctions/index.html")

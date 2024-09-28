@@ -1,3 +1,13 @@
 body {
     padding: 10px;
 }
+
+.listing_block {
+    display: flex;
+    flex-direction: column;
+}
+
+.listing_block_input {
+    display: flex;
+    flex-direction: column;
+}
