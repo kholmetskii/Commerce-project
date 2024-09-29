@@ -1,6 +1,6 @@
 from django.contrib.auth import authenticate, login, logout
 from django.db import IntegrityError
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from .models import Category, Listing
@@ -9,11 +9,18 @@ from .models import User
 
 
 def index(request):
-    listings = Listing.objects.all()
     categories = Category.objects.all()
+    selected_categories = request.GET.getlist('categories')
+    if selected_categories:
+        selected_categories = list(map(int, selected_categories))
+        listings = Listing.objects.filter(category__id__in=selected_categories, is_active=True)
+    else:
+        listings = Listing.objects.filter(is_active=True)
+
     return render(request, "auctions/active_listings.html", {
-        'listings': listings,
-        'categories': categories
+        "categories": categories,
+        "listings": listings,
+        "selected_categories": selected_categories
     })
 
 
@@ -88,7 +95,7 @@ def create_listing(request):
             new_listing.save()
             return redirect('index')
     else:
-        return render(request, "auctions/active_listings.html")
+        return redirect('register')
 
 
 def view_listing(request, id):

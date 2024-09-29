@@ -3,19 +3,20 @@
 {% block body %}
     <div>
         <div class="row">
-            <!-- Боковая панель с категориями -->
             <div class="col-md-2" style="border-right: 1px solid #ddd;">
-                <h2>Categories</h2>
-                <ul class="list-group">
-                    {% for category in categories %}
-                        <li class="list-group-item">
-                            <div>{{ category.name }}</div>
-                        </li>
-                    {% endfor %}
-                </ul>
+                <form method="GET">
+                    <h2>Categories</h2>
+                    <div class="form-check">
+                        {% for category in categories %}
+                            <input class="form-check-input" type="checkbox" name="categories" value="{{ category.id }}" id="category-{{ category.id }}" {% if category.id in selected_categories %} checked {% endif %}>
+                            <label class="form-check-label" for="category-{{ category.id }}">{{ category.name }}</label>
+                            <br>
+                        {% endfor %}
+                    </div>
+                    <button type="submit" class="btn btn-primary mt-2">Filter</button>
+                </form>
             </div>
 
-            <!-- Секция с активными объявлениями -->
             <div class="col-md-10">
                 <h2>Active Listings</h2>
                 {% for listing in listings %}
