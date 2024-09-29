@@ -2,31 +2,30 @@
 
 {% block body %}
     <div class="container mt-5">
-    <h1>Listing: {{ listing.title }}</h1>
-    <button class="btn btn-secondary mb-3">Watchlist</button>
-    <div class="row">
-        <div class="col-md-8">
-            <img src="{{ listing.image_url }}" class="img-fluid" alt="{{ listing.name }}">
-            <p class="mt-3">{{ listing.description }}</p>
-            <h2>${{ listing.price }}</h2>
-            <p>{{ listing.bids_count }} bid(s) so far. Your bid is the current bid.</p>
-
-            <!-- Bid Form -->
-            <form  method="POST">
-                {% csrf_token %}
-                <div class="input-group mb-3">
-                    <input type="text" name="bid" class="form-control" placeholder="Bid" aria-label="Bid" aria-describedby="button-addon2">
-                    <button class="btn btn-primary" type="submit" id="button-addon2">Place Bid</button>
-                </div>
-            </form>
+        <h1>{{ listing.title }}</h1>
+        <div class="row">
+            <div class="col-md-4 position-relative">
+                <img src="{{ listing.imageUrl }}" class="img-fluid" alt="{{ listing.title }}">
+                <button class="btn btn-secondary mb-3 watchlist-btn">Watchlist</button>
+            </div>
+            <div class="col-md-8">
+                <h3>Details</h3>
+                <ul>
+                    <li><strong>Listed by:</strong> <a href="#">{{ listing.owner.username }}</a></li>
+                    <li><strong>Description:</strong> {{ listing.description }}</li>
+                    <li><strong>Category:</strong> {{ listing.category.name }}</li>
+                    <li><strong>Current price:</strong>${{ listing.price }}</li>
+                </ul>
+                <p>{{ listing.bids_count }} bid(s) so far. Your bid is the current bid.</p>
+                <form  method="POST">
+                    {% csrf_token %}
+                    <div class="input-group mb-3">
+                        <input type="text" name="bid" class="form-control" placeholder="Bid" aria-label="Bid" aria-describedby="button-addon2">
+                        <button class="btn btn-primary" type="submit" id="button-addon2">Place Bid</button>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
-
-    <h3>Details</h3>
-    <ul>
-        <li>Listed by: <a href="#">{{ listing.seller.username }}</a></li>
-        <li>Category: {{ listing.category.name }}</li>
-    </ul>
-</div>
-
+    <hr>
 {% endblock %}

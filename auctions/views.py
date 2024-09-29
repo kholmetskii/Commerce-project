@@ -99,4 +99,7 @@ def create_listing(request):
 
 
 def view_listing(request, id):
-    return render(request, "auctions/listing.html")
+    listing = Listing.objects.get(pk=id)
+    return render(request, "auctions/listing.html", {
+        "listing": listing
+    })
