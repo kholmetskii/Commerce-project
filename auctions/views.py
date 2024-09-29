@@ -10,8 +10,10 @@ from .models import User
 
 def index(request):
     listings = Listing.objects.all()
+    categories = Category.objects.all()
     return render(request, "auctions/active_listings.html", {
-        'listings': listings
+        'listings': listings,
+        'categories': categories
     })
 
 
@@ -87,3 +89,7 @@ def create_listing(request):
             return redirect('index')
     else:
         return render(request, "auctions/active_listings.html")
+
+
+def view_listing(request, id):
+    return render(request, "auctions/listing.html")
