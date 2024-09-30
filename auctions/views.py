@@ -137,19 +137,40 @@ def make_bid(request, listing_id):
     listing = Listing.objects.get(pk=listing_id)
     if request.user.is_authenticated:
         bid_amount = float(request.POST["bid"])
-        if bid_amount > listing.current_bid:
-            new_bid = Bid.objects.create(
-                listing=listing,
-                user=request.user,
-                bid_amount=bid_amount
-            )
-            listing.last_bid = bid_amount
-            new_bid.save()
-            return redirect('view_listing', listing_id=listing.id)
-        return render(request, "auctions/listing.html", {
-            "listing": listing,
-            "error": "Your bid must be higher than the current bid."
-        })
+        if listing.last_bid:
+            if bid_amount > listing.last_bid.amount:
+                new_bid = Bid.objects.create(
+                    listing=listing,
+                    user=request.user,
+                    amount=bid_amount
+                )
+                new_bid.save()
+                listing.last_bid = new_bid
+                print("New bid was created.")
+                return redirect('view_listing', listing_id=listing.id)
+            else:
+                print("Your bid must be higher than the current bid.")
+                return render(request, "auctions/listing.html", {
+                    "listing": listing,
+                    "error": "Your bid must be higher than the current bid."
+                })
+        else:
+            if bid_amount > listing.start_price:
+                new_bid = Bid.objects.create(
+                    listing=listing,
+                    user=request.user,
+                    amount=bid_amount
+                )
+                new_bid.save()
+                listing.last_bid = new_bid
+                print("New bid was created.")
+                return redirect('view_listing', listing_id=listing.id)
+            else:
+                print("Your bid must be higher than the start price.")
+                return render(request, "auctions/listing.html", {
+                    "listing": listing,
+                    "error": "Your bid must be higher than the start price."
+                })
     else:
         return render(request, "auctions/listing.html", {
             "listing": listing,

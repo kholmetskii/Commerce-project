@@ -26,10 +26,17 @@
                     <li><strong>Description:</strong> {{ listing.description }}</li>
                     <li><strong>Category:</strong> {{ listing.category.name }}</li>
                     <li><strong>Start price:</strong> ${{ listing.start_price }}</li>
-                    <li><strong>Current bid:</strong> ${{ listing.current_bid }}</li>
                 </ul>
-                <p>{{ listing.bids_count }} bid(s) so far. Your bid is the current bid.</p>
-
+                <h3>Bid</h3>
+                <ul>
+                    {% if listing.last_bid %}
+                        <li><strong>Last bid:</strong> ${{ listing.last_bid.amount }}</li>
+                        <li><strong>By:</strong> ${{ listing.last_bid.user }}</li>
+                        <li>{{ listing.bid.count }} bid(s) so far.</li>
+                    {% else %}
+                        <li>There are no bids yet. Be the first!</li>
+                    {% endif %}
+                </ul>
                 <form method="POST" action="{% url 'make_bid' listing.id %}">
                     {% csrf_token %}
                     <div class="input-group mb-3">

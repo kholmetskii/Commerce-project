@@ -28,5 +28,5 @@ class Listing(models.Model):
 class Bid(models.Model):
     listing = models.ForeignKey(Listing, on_delete=models.CASCADE, related_name="bid")
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="bid")
-    bid_amount = models.FloatField()
-    bid_time = models.DateTimeField(auto_now_add=True)
+    amount = models.FloatField()
+    time_of_posting = models.DateTimeField(auto_now_add=True)
