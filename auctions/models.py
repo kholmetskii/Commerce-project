@@ -17,7 +17,14 @@ class Listing(models.Model):
     title = models.CharField(max_length=32)
     description = models.CharField(max_length=512)
     imageUrl = models.CharField(max_length=1024)
-    price = models.FloatField()
+    start_price = models.FloatField()
     owner = models.ForeignKey(User, on_delete=models.CASCADE, null=True, related_name="user")
     is_active = models.BooleanField(default=True)
     category = models.ForeignKey(Category, on_delete=models.CASCADE, blank=True, null=True, related_name="category")
+
+
+class Bid(models.Model):
+    listing = models.ForeignKey(Listing, on_delete=models.CASCADE, related_name="bid")
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="bid")
+    bid_amount = models.FloatField()
+    bid_time = models.DateTimeField(auto_now_add=True)
