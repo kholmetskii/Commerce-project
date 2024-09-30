@@ -3,6 +3,7 @@ from django.db import IntegrityError
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.urls import reverse
+
 from .models import Category, Listing
 
 from .models import User
@@ -98,8 +99,21 @@ def create_listing(request):
         return redirect('register')
 
 
-def view_listing(request, id):
-    listing = Listing.objects.get(pk=id)
+def view_listing(request, listing_id):
+    listing = Listing.objects.get(pk=listing_id)
     return render(request, "auctions/listing.html", {
         "listing": listing
     })
+
+
+def toggle_watchlist(request, listing_id):
+    if request.user.is_authenticated:
+        listing = Listing.objects.get(pk=listing_id)
+        user = request.user
+        if listing in user.watchlist.all():
+            user.watchlist.remove(listing)
+        else:
+            user.watchlist.add(listing)
+        return redirect('view_listing', listing_id=listing_id)
+    else:
+        return redirect('register')

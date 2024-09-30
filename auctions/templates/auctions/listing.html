@@ -6,7 +6,19 @@
         <div class="row">
             <div class="col-md-4 position-relative">
                 <img src="{{ listing.imageUrl }}" class="img-fluid" alt="{{ listing.title }}">
-                <button class="btn btn-secondary mb-3 watchlist-btn">Watchlist</button>
+                <form method="POST" action="{% url 'toggle_watchlist' listing.id %}">
+                    {% csrf_token %}
+                    <input type="checkbox" class="btn-check" name="is_added_to_watchlist" id="btn-check-2-outlined"
+                        {% if listing in user.watchlist.all %} checked {% endif %}
+                        onchange="this.form.submit()">
+                    <label class="btn btn-outline-secondary watchlist-btn" for="btn-check-2-outlined">
+                        {% if listing in user.watchlist.all %}
+                            Remove from Watchlist
+                        {% else %}
+                            Add to Watchlist
+                        {% endif %}
+                    </label>
+                </form>
             </div>
             <div class="col-md-8">
                 <h3>Details</h3>

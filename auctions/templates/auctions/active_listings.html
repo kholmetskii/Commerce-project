@@ -22,7 +22,7 @@
                 {% for listing in listings %}
                     {% if listing.is_active %}
                         <div class="container mt-5">
-                            <a href="{% url 'view_listing' id=listing.id %}" style="text-decoration: none; color: inherit;">
+                            <a href="{% url 'view_listing' listing.id %}" style="text-decoration: none; color: inherit;">
                                 <div class="card mb-3" style="max-width: 100%;">
                                     <div class="row g-0">
                                         <div class="col-md-4">
