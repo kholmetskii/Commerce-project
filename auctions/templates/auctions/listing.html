@@ -26,14 +26,16 @@
                     <li><strong>Listed by:</strong> <a href="#">{{ listing.owner.username }}</a></li>
                     <li><strong>Description:</strong> {{ listing.description }}</li>
                     <li><strong>Category:</strong> {{ listing.category.name }}</li>
-                    <li><strong>Current price:</strong>${{ listing.price }}</li>
+                    <li><strong>Start price:</strong> ${{ listing.start_price }}</li>
+                    <li><strong>Current bid:</strong> ${{ listing.current_bid }}</li>
                 </ul>
                 <p>{{ listing.bids_count }} bid(s) so far. Your bid is the current bid.</p>
-                <form  method="POST">
+
+                <form method="POST" action="{% url 'make_bid' listing.id %}">
                     {% csrf_token %}
                     <div class="input-group mb-3">
-                        <input type="text" name="bid" class="form-control" placeholder="Bid" aria-label="Bid" aria-describedby="button-addon2">
-                        <button class="btn btn-primary" type="submit" id="button-addon2">Place Bid</button>
+                        <input type="text" name="bid" class="form-control" placeholder="Bid" aria-label="Bid">
+                        <button class="btn btn-primary" type="submit">Place Bid</button>
                     </div>
                 </form>
             </div>

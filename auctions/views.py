@@ -78,8 +78,8 @@ def register(request):
 
 
 def create_listing(request):
+    categories = Category.objects.all()
     if request.user.is_authenticated:
-        categories = Category.objects.all()
         if request.method == "GET":
             return render(request, "auctions/create_listing.html", {
                 "categories": categories
@@ -89,14 +89,17 @@ def create_listing(request):
                 title=request.POST['title'],
                 description=request.POST['description'],
                 imageUrl=request.POST['imageURL'],
-                price=float(request.POST['price']),
+                start_price=float(request.POST['price']),
                 category=Category.objects.get(name=request.POST['category']),
                 owner=request.user
             )
             new_listing.save()
             return redirect('index')
     else:
-        return redirect('register')
+        return render(request, "auctions/create_listing.html", {
+            "categories": categories,
+            "error": "You must be sign in."
+        })
 
 
 def view_listing(request, listing_id):
@@ -107,8 +110,8 @@ def view_listing(request, listing_id):
 
 
 def toggle_watchlist(request, listing_id):
+    listing = Listing.objects.get(pk=listing_id)
     if request.user.is_authenticated:
-        listing = Listing.objects.get(pk=listing_id)
         user = request.user
         if listing in user.watchlist.all():
             user.watchlist.remove(listing)
@@ -116,13 +119,39 @@ def toggle_watchlist(request, listing_id):
             user.watchlist.add(listing)
         return redirect('view_listing', listing_id=listing_id)
     else:
-        return redirect('register')
+        return render(request, "auctions/listing.html", {
+            "listing": listing,
+            "error": "You must be sign in."
+        })
 
 
 def watchlist(request):
     user = request.user
     listings = user.watchlist.all()
-    print(listings)
     return render(request, "auctions/watchlist.html", {
         "listings": listings
     })
+
+
+def make_bid(request, listing_id):
+    listing = Listing.objects.get(pk=listing_id)
+    if request.user.is_authenticated:
+        bid_amount = float(request.POST["bid"])
+        if bid_amount > (listing.current_bid or listing.price):
+            new_bid = Bid.objects.create(
+                listing=listing,
+                user=request.user,
+                bid_amount=bid_amount
+            )
+            listing.current_bid = bid_amount
+            new_bid.save()
+            return redirect('view_listing', listing_id=listing.id)
+        return render(request, "auctions/listing.html", {
+            "listing": listing,
+            "error": "Your bid must be higher than the current bid."
+        })
+    else:
+        return render(request, "auctions/listing.html", {
+            "listing": listing,
+            "error": "You must be sign in."
+        })
