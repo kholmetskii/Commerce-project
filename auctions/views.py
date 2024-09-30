@@ -4,7 +4,7 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.urls import reverse
 
-from .models import Category, Listing
+from .models import Category, Listing, Bid
 
 from .models import User
 
@@ -137,13 +137,13 @@ def make_bid(request, listing_id):
     listing = Listing.objects.get(pk=listing_id)
     if request.user.is_authenticated:
         bid_amount = float(request.POST["bid"])
-        if bid_amount > (listing.current_bid or listing.price):
+        if bid_amount > listing.current_bid:
             new_bid = Bid.objects.create(
                 listing=listing,
                 user=request.user,
                 bid_amount=bid_amount
             )
-            listing.current_bid = bid_amount
+            listing.last_bid = bid_amount
             new_bid.save()
             return redirect('view_listing', listing_id=listing.id)
         return render(request, "auctions/listing.html", {
