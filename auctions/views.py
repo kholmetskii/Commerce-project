@@ -117,3 +117,12 @@ def toggle_watchlist(request, listing_id):
         return redirect('view_listing', listing_id=listing_id)
     else:
         return redirect('register')
+
+
+def watchlist(request):
+    user = request.user
+    listings = user.watchlist.all()
+    print(listings)
+    return render(request, "auctions/watchlist.html", {
+        "listings": listings
+    })
