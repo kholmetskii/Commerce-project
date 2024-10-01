@@ -2,31 +2,7 @@
 
 {% block body %}
     <div class="row">
-        <div class="col-md-2" style="border-right: 1px solid #ddd;">
-            <h2>Comments</h2>
-            <form method="POST" action="{% url 'make_comment' listing.id %}">
-                {% csrf_token %}
-                <div class="card">
-                    <textarea name="content" class="card-body" rows="1" style="outline: none; resize: none; border: none;" onfocus="none;"></textarea>
-                    <button class="card-footer btn">
-                        Make new comment
-                    </button>
-                </div>
-            </form>
-            <hr>
-            {% for comment in listing.comments.all %}
-                <div class="card mb-3">
-                    <div class="card-header">
-                        <strong class="small">{{ comment.user.username }}</strong>
-                        <span class="text-muted small">commented on {{ comment.time_of_posting|date:"d M Y H:i" }}</span>
-                    </div>
-                    <div class="card-body">
-                        <p class="card-text">{{ comment.content }}</p>
-                    </div>
-                </div>
-            {% endfor %}
-        </div>
-        <div class="col-md-10">
+        <div class="col-md-9">
             <h2>{{ listing.title }}</h2>
             <div class="container mt-5">
                 {% if error %}
@@ -77,6 +53,32 @@
                         </form>
                     </div>
                 </div>
+            </div>
+        </div>
+        <div class="col-md-3" style="border-left: 1px solid #ddd;">
+            <h2>Comments</h2>
+            <form method="POST" action="{% url 'make_comment' listing.id %}">
+                {% csrf_token %}
+                <div class="card">
+                    <textarea name="content" class="card-body" rows="1" style="outline: none; resize: none; border: none;" onfocus="none;"></textarea>
+                    <button class="card-footer btn">
+                        Make new comment
+                    </button>
+                </div>
+            </form>
+            <hr>
+            <div style="max-height: 300px; overflow-y: auto;">
+                {% for comment in listing.comments.all|dictsortreversed:"time_of_posting" %}
+                    <div class="card mb-3">
+                        <div class="card-header">
+                            <strong class="small">{{ comment.user.username }}</strong>
+                            <span class="text-muted small">commented on {{ comment.time_of_posting|date:"d M Y H:i" }}</span>
+                        </div>
+                        <div class="card-body">
+                            <p class="card-text">{{ comment.content }}</p>
+                        </div>
+                    </div>
+                {% endfor %}
             </div>
         </div>
     </div>
