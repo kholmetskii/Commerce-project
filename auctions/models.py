@@ -33,3 +33,9 @@ class Bid(models.Model):
     time_of_posting = models.DateTimeField(auto_now_add=True)
 
 
+class Comment(models.Model):
+    listing = models.ForeignKey(Listing, on_delete=models.CASCADE, related_name="comments")
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="comments")
+    content = models.TextField()
+    time_of_posting = models.DateTimeField(auto_now_add=True)
+
