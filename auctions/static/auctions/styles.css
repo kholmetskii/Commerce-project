@@ -21,17 +21,27 @@ body {
     flex-direction: column;
 }
 
+.card {
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
 .card:hover {
     background-color: #f0f0f0;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    transition: background-color 0.3s ease, box-shadow 0.3s ease;
 }
+
 .position-relative {
     position: relative;
 }
+
 .watchlist-btn {
     position: absolute;
     top: 10px;
     left: 20px;
     z-index: 10;
+}
+
+input:focus {
+    outline: none;
+    box-shadow: none;
 }

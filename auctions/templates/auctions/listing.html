@@ -4,7 +4,7 @@
     <div class="row">
         <div class="col-md-9">
             <h2>{{ listing.title }}</h2>
-            <div class="container mt-5">
+            <div class="container">
                 {% if error %}
                     <div class="alert alert-danger">
                         {{ error }}
@@ -35,28 +35,34 @@
                             <li><strong>Start price:</strong> ${{ listing.start_price }}</li>
                         </ul>
                         <h3>Bid</h3>
-                        <ul>
-                            {% if listing.last_bid %}
-                                <li><strong>Last bid:</strong> ${{ listing.last_bid.amount }}</li>
-                                <li><strong>By:</strong> {{ listing.last_bid.user }}</li>
-                                <li>{{ listing.bids.count }} bid(s) so far.</li>
-                            {% else %}
-                                <li>There are no bids yet. Be the first!</li>
-                            {% endif %}
-                        </ul>
-                        <form method="POST" action="{% url 'make_bid' listing.id %}">
-                            {% csrf_token %}
-                            <div class="input-group mb-3">
-                                <input type="text" name="bid" class="form-control" placeholder="Bid" aria-label="Bid">
-                                <button class="btn btn-primary" type="submit">Place Bid</button>
+                        {% if listing.is_active %}
+                            <ul>
+                                {% if listing.last_bid %}
+                                    <li><strong>Last bid:</strong> ${{ listing.last_bid.amount }}</li>
+                                    <li><strong>By:</strong> {{ listing.last_bid.user }}</li>
+                                    <li>{{ listing.bids.count }} bid(s) so far.</li>
+                                {% else %}
+                                    <li>There are no bids yet. Be the first!</li>
+                                {% endif %}
+                            </ul>
+                            <form method="POST" action="{% url 'make_bid' listing.id %}">
+                                {% csrf_token %}
+                                <div class="input-group mb-3">
+                                    <input type="text" name="bid" class="form-control" placeholder="Bid" aria-label="Bid">
+                                    <button class="btn btn-outline-secondary" type="submit">Place Bid</button>
+                                </div>
+                            </form>
+                        {% else %}
+                            <div class="alert alert-light" role="alert">
+                                 This listing was closed for bidding
                             </div>
-                        </form>
+                        {% endif %}
                     </div>
                 </div>
             </div>
         </div>
         <div class="col-md-3" style="border-left: 1px solid #ddd;">
-            <h2>Comments</h2>
+            <h3>Add Comment</h3>
             <form method="POST" action="{% url 'make_comment' listing.id %}">
                 {% csrf_token %}
                 <div class="card">
@@ -67,6 +73,7 @@
                 </div>
             </form>
             <hr>
+            <h3>All Comments</h3>
             <div style="max-height: 300px; overflow-y: auto;">
                 {% for comment in listing.comments.all|dictsortreversed:"time_of_posting" %}
                     <div class="card mb-3">
@@ -83,4 +90,21 @@
         </div>
     </div>
     <hr>
+    {% if listing.owner == user %}
+        <div class="alert alert-light d-flex align-items-center justify-content-between">
+            You are owner of this listing, so you can manage it
+            <form method="POST" action="{% url 'toggle_listing' listing.id %}">
+                {% csrf_token %}
+                <input type="hidden" name="is_active" value="{% if listing.is_active  %}1{% else %}0{% endif %}">
+                <button type="submit"
+                        class="btn {% if listing.is_active %}btn-secondary{% else %}btn-outline-secondary{% endif %}">
+                    {% if listing.is_active %}
+                        Close the bidding
+                    {% else %}
+                        Open the bidding
+                    {% endif %}
+                </button>
+            </form>
+        </div>
+    {% endif %}
 {% endblock %}

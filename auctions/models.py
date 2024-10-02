@@ -24,6 +24,8 @@ class Listing(models.Model):
                                  related_name="listings_in_category")
     last_bid = models.ForeignKey('Bid', on_delete=models.SET_NULL, blank=True, null=True,
                                  related_name="last_bid_listing")
+    winner = models.ForeignKey(User, on_delete=models.SET_NULL, blank=True, null=True,
+                               related_name="won_listings")
 
 
 class Bid(models.Model):

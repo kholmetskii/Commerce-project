@@ -192,3 +192,15 @@ def make_comment(request, listing_id):
             "listing": listing,
             "error": "You must be sign in."
         })
+
+
+def toggle_listing(request, listing_id):
+    listing = Listing.objects.get(pk=listing_id)
+    if listing.is_active:
+        listing.is_active = False
+        listing.save()
+        return redirect('view_listing', listing_id=listing.id)
+    else:
+        listing.is_active = True
+        listing.save()
+        return redirect('view_listing', listing_id=listing.id)
