@@ -199,7 +199,8 @@ def toggle_listing(request, listing_id):
     if request.user == listing.owner:
         if listing.is_active:
             listing.is_active = False
-            listing.winner = listing.last_bid.user
+            if listing.last_bid:
+                listing.winner = listing.last_bid.user
             listing.save()
             return redirect('view_listing', listing_id=listing.id)
         else:

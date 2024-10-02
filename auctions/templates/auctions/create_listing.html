@@ -11,23 +11,23 @@
             {% csrf_token %}
             <div class="mb-3">
               <label for="title" class="form-label">Title</label>
-              <input name="title" type="text" class="form-control" id="title" placeholder="title">
+              <input name="title" type="text" class="form-control" id="title" placeholder="title" required>
             </div>
             <div class="mb-3">
               <label for="description" class="form-label">Description</label>
-              <input name="description" type="text" class="form-control" id="description" placeholder="description">
+              <input name="description" type="text" class="form-control" id="description" placeholder="description" required>
             </div>
             <div class="mb-3">
               <label for="price" class="form-label">Price</label>
-              <input name="price" type="number" class="form-control" id="price" placeholder="price">
+              <input name="price" type="number" class="form-control" id="price" placeholder="price" required>
             </div>
             <div class="mb-3">
               <label for="image" class="form-label">URL of image</label>
-              <input name="imageURL" type="text" class="form-control" id="image" placeholder="URL of image">
+              <input name="imageURL" type="url" class="form-control" id="image" placeholder="URL of image" required>
             </div>
             <div>
                 <label for="category" class="form-label">Category</label>
-                <input name="category" class="form-control" list="category_list" id="category" placeholder="type to search category">
+                <input name="category" class="form-control" list="category_list" id="category" placeholder="type to search category" required>
                 <datalist id="category_list">
                   {% for category in categories %}
                         <option value="{{ category.name }}">{{ category.name }}</option>

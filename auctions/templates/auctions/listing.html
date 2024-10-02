@@ -53,7 +53,7 @@
                                 </div>
                             </form>
                         {% else %}
-                            {% if listing.owner == user %}
+                            {% if listing.owner == user and listing.last_bid %}
                                 <div class="alert alert-success" role="alert">
                                     <strong>{{listing.winner.username}}</strong> won that auction! To contact him, write an email: {{listing.winner.email}}
                                 </div>
@@ -76,7 +76,7 @@
             <form method="POST" action="{% url 'make_comment' listing.id %}">
                 {% csrf_token %}
                 <div class="card">
-                    <textarea name="content" class="card-body" rows="1" style="outline: none; resize: none; border: none;" onfocus="none;"></textarea>
+                    <textarea name="content" class="card-body" rows="1" style="outline: none; resize: none; border: none;" onfocus="none;" required></textarea>
                     <button class="card-footer btn">
                         Make new comment
                     </button>
