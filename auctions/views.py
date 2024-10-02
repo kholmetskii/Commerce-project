@@ -196,11 +196,20 @@ def make_comment(request, listing_id):
 
 def toggle_listing(request, listing_id):
     listing = Listing.objects.get(pk=listing_id)
-    if listing.is_active:
-        listing.is_active = False
-        listing.save()
-        return redirect('view_listing', listing_id=listing.id)
+    if request.user == listing.owner:
+        if listing.is_active:
+            listing.is_active = False
+            listing.winner = listing.last_bid.user
+            listing.save()
+            return redirect('view_listing', listing_id=listing.id)
+        else:
+            listing.is_active = True
+            listing.winner = None
+            listing.save()
+            return redirect('view_listing', listing_id=listing.id)
     else:
-        listing.is_active = True
-        listing.save()
-        return redirect('view_listing', listing_id=listing.id)
+        print('error')
+        return render(request, "auctions/listing.html", {
+            "listing": listing,
+            "error": "Access refused. You do not have rights."
+        })

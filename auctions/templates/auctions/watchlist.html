@@ -2,27 +2,25 @@
 
 {% block body %}
 <h2>Watchlist</h2>
-                {% for listing in listings %}
-                    {% if listing.is_active %}
-                        <div class="container mt-5">
-                            <a href="{% url 'view_listing' listing.id %}" style="text-decoration: none; color: inherit;">
-                                <div class="card mb-3" style="max-width: 100%;">
-                                    <div class="row g-0">
-                                        <div class="col-md-4">
-                                            <img src="{{ listing.imageUrl }}" class="img-fluid rounded-start" alt="{{ listing.title }}">
-                                        </div>
-                                        <div class="col-md-8">
-                                            <div class="card-body">
-                                                <h5 class="card-title">{{ listing.title }}</h5>
-                                                <hr>
-                                                <p class="card-text"><strong>Start price:</strong> ${{ listing.start_price }}</p>
-                                                <h6 class="card-text"><strong>Description:</strong> {{ listing.description }}</h6>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </a>
+    {% for listing in listings %}
+        <div class="container mt-5">
+            <a href="{% url 'view_listing' listing.id %}" style="text-decoration: none; color: inherit;">
+                <div class="card mb-3" style="max-width: 100%;">
+                    <div class="row g-0">
+                        <div class="col-md-4">
+                            <img src="{{ listing.imageUrl }}" class="img-fluid rounded-start" alt="{{ listing.title }}">
                         </div>
-                    {% endif %}
-                {% endfor %}
+                        <div class="col-md-8">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ listing.title }}</h5>
+                                <hr>
+                                <p class="card-text"><strong>Start price:</strong> ${{ listing.start_price }}</p>
+                                <h6 class="card-text"><strong>Description:</strong> {{ listing.description }}</h6>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </a>
+        </div>
+    {% endfor %}
 {% endblock %}
