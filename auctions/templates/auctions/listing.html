@@ -48,8 +48,8 @@
                             <form method="POST" action="{% url 'make_bid' listing.id %}">
                                 {% csrf_token %}
                                 <div class="input-group mb-3">
-                                    <input type="text" name="bid" class="form-control" placeholder="Bid" aria-label="Bid">
-                                    <button class="btn btn-outline-secondary" type="submit">Place Bid</button>
+                                    <input type="text" name="bid" class="form-control" placeholder="Bid" aria-label="Bid" {% if listing.owner == user %} disabled {% endif %}>
+                                    <button class="btn btn-outline-secondary" type="submit" {% if listing.owner == user %} disabled {% endif %}>Place Bid</button>
                                 </div>
                             </form>
                         {% else %}
